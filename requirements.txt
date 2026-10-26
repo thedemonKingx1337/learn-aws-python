@@ -1,0 +1,7 @@
+# Installed into .venv, built from pyenv-win 3.12.6 (see CLAUDE.md)
+#   .\.venv\Scripts\Activate.ps1
+#   pip install -r requirements.txt
+#
+# The AWS CLI is NOT listed here - it is a standalone Windows binary,
+# not a pip package.
+boto3==1.43.118

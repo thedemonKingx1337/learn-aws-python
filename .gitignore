@@ -1,0 +1,23 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+
+# Environments (this project uses the system Python, but keep these safe)
+.venv/
+venv/
+.env
+
+# Editor
+.vscode/
+.idea/
+
+# AWS credentials - never commit these
+.aws/
+credentials
+*.pem
+*.ppk
+
+# Data and generated output
+data/
+output/
