@@ -7,27 +7,7 @@ You write `SELECT` first. The database runs it sixth.
 
 ## The real order
 
-```text
-   ┌────────────────────────────────────────────────┐
-   │ 1. FROM / JOIN       build the row set         │
-   ├────────────────────────────────────────────────┤
-   │ 2. WHERE             filter individual rows    │
-   ├────────────────────────────────────────────────┤
-   │ 3. GROUP BY          collapse rows into groups │
-   ├────────────────────────────────────────────────┤
-   │ 4. HAVING            filter the groups         │
-   ├────────────────────────────────────────────────┤
-   │ 5. WINDOW FUNCTIONS  computed HERE             │
-   ├────────────────────────────────────────────────┤
-   │ 6. SELECT            aliases are born HERE     │
-   ├────────────────────────────────────────────────┤
-   │ 7. DISTINCT          de-duplicate the output   │
-   ├────────────────────────────────────────────────┤
-   │ 8. ORDER BY          sort                      │
-   ├────────────────────────────────────────────────┤
-   │ 9. LIMIT / OFFSET    cut                       │
-   └────────────────────────────────────────────────┘
-```
+**The figure is in its own file:** [01_execution_order_figure.md](01_execution_order_figure.md). Open it in a split view and keep it beside this lesson and beside your queries.
 
 Read it as a **pipeline**: each stage receives the rows the stage above
 produced. A stage cannot see anything a later stage creates.

@@ -42,7 +42,7 @@ That file **drops and recreates only the `practice` schema**. It never touches `
 
 | File | Topic |
 |---|---|
-| [01_execution_order.md](01_execution_order.md) | The clause execution order, and the four rules that follow from it. **Start here** — the other three lessons are consequences of this one. |
+| [01_execution_order.md](01_execution_order.md) + [figure](01_execution_order_figure.md) | The clause execution order, and the four rules that follow from it. **Start here** — the other three lessons are consequences of this one. |
 | [05_joins.md](05_joins.md) | **Read this second**, despite the number — it was added later. INNER vs LEFT, the `ON`-vs-`WHERE` trap, **fan-out** (68,883 orders become 172,198 rows), self-joins, and why 11,452 of your orders vanish under an inner join. |
 | [02_distinct.md](02_distinct.md) | DISTINCT applies to the whole row; NULL handling; `count(DISTINCT)`; `DISTINCT ON` |
 | [03_window_functions.md](03_window_functions.md) | `OVER`, `PARTITION BY`, ROW_NUMBER vs RANK vs DENSE_RANK, NULLS FIRST trap, ROWS vs RANGE frames, LAG/LEAD |
