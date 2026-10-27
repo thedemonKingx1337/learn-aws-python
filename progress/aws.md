@@ -22,6 +22,7 @@ Chapters: [aws/](../aws/). Account rules: [docs/aws/aws-safety-rules.md](../docs
 | Recovering a locked bucket: Root access management | Practised | console | 2026-10-27 |
 | AWS Organizations and SCPs: the region guardrail | Mentioned | - | 2026-10-27 |
 | S3 bucket encryption: SSE-KMS, Bucket Key, customer managed key | Walked through | Udemy + console | 2026-10-24 |
+| S3 buckets vs prefixes: one bucket instead of the course's four | Walked through | [Glue-MasterClass/](../Glue-MasterClass/README.md) | 2026-10-27 |
 | S3 with boto3: objects, paginators, presigned URLs | Not started | chapter 2 | - |
 | IAM in depth: writing policies, `AssumeRole` | Not started | chapter 3 | - |
 | CloudWatch Logs | Not started | - | - |
@@ -125,3 +126,9 @@ Chapters: [aws/](../aws/). Account rules: [docs/aws/aws-safety-rules.md](../docs
 - **Idea:** SSE-KMS encrypts every object with a KMS key. Bucket Key cuts the number of KMS calls, so it costs less. A customer managed key costs about $1 a month while it exists. Reading or writing objects also needs `kms:Decrypt` and `kms:GenerateDataKey` on the key.
 - **Did:** created `bucket101pb` (2026-10-24) and the key `alias/s3101-KMS` by following the Udemy lectures. Claude checked on 2026-10-27: SSE-KMS with that key, Bucket Key on, all public access blocked.
 - **Check:** `learning-cli` can list the bucket, but an upload fails with an error that mentions KMS. Why?
+
+### S3 buckets vs prefixes: one bucket instead of the course's four
+- **Idea:** a bucket is flat, with no real folders. A key is the object's whole name, such as `etl-targets/gluejob1/part-00000.parquet`; the console draws a folder for each shared prefix up to a `/`, and `aws s3 ls` prints it as `PRE`. Glue jobs and crawlers take an S3 path, not just a bucket, so `s3://bucket101pb/etl-targets/` does the job of a whole course bucket, and the bucket's SSE-KMS, Block Public Access and policy setup is reused instead of repeated.
+- **What worked:** not confirmed yet. Analogy given: one almirah (അലമാര) with four labelled shelves instead of four almirahs; then the twist that there are no shelves either, only the label written into each item's name.
+- **Shaky:** asked twice whether one bucket is enough: first proposed reusing it, then asked how many to create. Check that the reason (prefixes) landed, not just the decision.
+- **Check:** what does `PRE` stand for in `aws s3 ls`, and why doesn't `etl-targets/` need creating before job 1 writes to it? A crawler is pointed at `s3://bucket101pb/` instead of one lab folder: what goes wrong?

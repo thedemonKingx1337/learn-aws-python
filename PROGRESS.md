@@ -1,6 +1,6 @@
 # Learning Progress
 
-**Status as of 2026-10-27 (Tuesday):** Learning AWS through the console, in `ap-southeast-2` as the IAM user `learning-cli`; the code chapters in `aws/` exist but have not been studied yet. The Udemy Glue course files are adapted to this account in `Glue-MasterClass/`; `role101` still needs the KMS key before any Glue job can run. The SQL track has five lessons; 0 of the 30 questions answered.
+**Status as of 2026-10-27 (Tuesday):** Learning AWS through the console, in `ap-southeast-2` as the IAM user `learning-cli`; the code chapters in `aws/` exist but have not been studied yet. The Udemy Glue course files are adapted to this account in `Glue-MasterClass/` but not uploaded yet (`bucket101pb` is still empty); `role101` still needs the KMS key before any Glue job can run. The SQL track has five lessons; 0 of the 30 questions answered.
 
 This is the dashboard. Each subject has its own file in [progress/](progress/) that lists every topic, covered or not, with short re-teach notes for the covered ones. How these files are used, including re-teaching a topic studied before: [docs/progress-tracking-rules.md](docs/progress-tracking-rules.md). Updated by the `/update-progress` command.
 
@@ -10,7 +10,7 @@ This is the dashboard. Each subject has its own file in [progress/](progress/) t
 
 | Subject | Practised | Walked through | Mentioned | Unknown | Not started | Detail |
 |---|---|---|---|---|---|---|
-| AWS | 4 | 3 | 5 | 2 | 18 | [progress/aws.md](progress/aws.md) |
+| AWS | 4 | 4 | 5 | 2 | 18 | [progress/aws.md](progress/aws.md) |
 | SQL | 1 | 3 | 1 | 0 | 3 | [progress/sql.md](progress/sql.md) |
 | Tools & environment | 1 | 4 | 1 | 0 | 0 | [progress/tools.md](progress/tools.md) |
 
@@ -62,3 +62,4 @@ Resolved 2026-10-26: AWS account confirmed, credentials configured, region settl
 - **2026-10-27 (housekeeping)** — No new learning. Since the last entry, moved `chapter1.py` into `aws/` and the AWS rule files into `docs/aws/`, and wrote `docs/sql/sql-rules.md`. Then, at the author's request, split this tracker per subject (`progress/aws.md`, `progress/sql.md`, `progress/tools.md`), each listing every topic with its status and re-teach notes, and added `docs/progress-tracking-rules.md` so a topic studied before is re-taught from what worked instead of from scratch.
 - **2026-10-27 (correction)** — The author pointed out they had never looked at `aws/chapter1.py`: they are learning AWS through the console and have not moved to code. Its four topics were downgraded from Walked through to Mentioned. The same check (did the author ask about it, or do it?) also downgraded the SCP topic to Mentioned and Windows shells to Walked through, and fixed *Did* notes that credited the author with commands Claude ran. The rule is now written into `docs/progress-tracking-rules.md` and the `/update-progress` command, whose old wording (Claude-written code counts as walked through) caused the over-claim.
 - **2026-10-27 (Glue course files)** — The author added the Udemy course folder `Glue-MasterClass/`. Adapted it to this account: the course's four buckets became prefixes in `bucket101pb` (the author's choice), `gluejobrole1` became `role101`, and `us-east-1` became `ap-southeast-2`. Fixed bugs in the course files (job 2 template pointed at a wrong script name and passed a wrongly-cased argument; jobs 1 and 6 defined their lookup table after the UDF ran; job 6 overwrote job 1's output) and cut workers from 15 G.2X to 2 G.1X. Found that Kinesis is denied by the SCP in every region, so the streaming lab can't run, and that `role101` has no KMS permission yet. The 140 MB `city_temperature.csv` goes into Git LFS.
+- **2026-10-27 (one bucket)** — Asked how many buckets the Glue course needs: none new, because `bucket101pb` holds the course's four as prefixes. Explained that S3 folders are only key prefixes (`aws s3 ls` prints `PRE`) and the catch: point each crawler at an exact prefix, never the bucket root. Claude checked: the account has one bucket, still empty.

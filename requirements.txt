@@ -1,7 +1,28 @@
 # Installed into .venv, built from pyenv-win 3.12.6 (see CLAUDE.md)
 #   .\.venv\Scripts\Activate.ps1
-#   pip install -r requirements.txt
+#   python -m pip install -r requirements.txt --ignore-requires-python
+#
+# --ignore-requires-python is needed for the last line only: AWS's Glue
+# library declares Python 3.11 exactly (the Python of Glue 5.1), and this
+# venv is 3.12. Every line is pinned to one version, so the flag cannot make
+# pip pick a different one.
 #
 # The AWS CLI is NOT listed here - it is a standalone Windows binary,
 # not a pip package.
 boto3==1.43.118
+
+# ---- For the Glue course scripts in Glue-MasterClass/ ----
+# Those scripts run ON AWS Glue, which has Spark and the Glue library built
+# in. They are installed here so the editor understands the scripts, and so
+# plain PySpark can run on this laptop (it needs Java: JAVA_HOME is JDK 19).
+
+# Spark's Python API. 3.5.6 is the Spark of Glue 5.1, AWS's default Glue
+# version. The course templates use Glue 3.0, whose Spark 3.1.1 (2021) is
+# older than Python 3.12 (2023) itself.
+pyspark==3.5.6
+
+# awsglue: GlueContext, DynamicFrame, getResolvedOptions. Not on PyPI, so it
+# comes from AWS's GitHub repo, branch glue-5.1, pinned to one commit.
+# Python half only: GlueContext also needs Glue's Java half, which exists
+# only on AWS. awsgluedq (Data Quality, gluejob6.py) has no package at all.
+AWSGlueDataplanePython @ git+https://github.com/awslabs/aws-glue-libs.git@dc40ea05fa59ed475ba7e4561699c0783874e0e0
