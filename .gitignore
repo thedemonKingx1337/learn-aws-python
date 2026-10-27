@@ -21,3 +21,7 @@ credentials
 # Data and generated output
 data/
 output/
+
+# macOS metadata that came inside the zipped course files
+__MACOSX/
+.DS_Store

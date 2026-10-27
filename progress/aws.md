@@ -2,7 +2,7 @@
 
 Chapters: [aws/](../aws/). Account rules: [docs/aws/aws-safety-rules.md](../docs/aws/aws-safety-rules.md). How this file is used, including re-teaching: [docs/progress-tracking-rules.md](../docs/progress-tracking-rules.md).
 
-**How the author is learning AWS:** through the console so far, alongside a Udemy course, *AWS Glue: The Complete Masterclass*, in this same AWS account. The code chapters in [aws/](../aws/) were written and run by Claude and have not been studied yet, so their topics are **Mentioned**; they start when the author moves to code. Topics covered only in the Udemy course are **Unknown** until the author says how deep they went.
+**How the author is learning AWS:** through the console so far, alongside a Udemy course, *AWS Glue: The Complete Masterclass*, in this same AWS account. The code chapters in [aws/](../aws/) were written and run by Claude and have not been studied yet, so their topics are **Mentioned**; they start when the author moves to code. Topics covered only in the Udemy course are **Unknown** until the author says how deep they went. The course files, adapted to this account, are in [Glue-MasterClass/](../Glue-MasterClass/README.md).
 
 ## Topics
 
@@ -41,8 +41,12 @@ Chapters: [aws/](../aws/). Account rules: [docs/aws/aws-safety-rules.md](../docs
 | Topic | Status | Where | First covered |
 |---|---|---|---|
 | DynamoDB | Not started | - | - |
-| Glue Data Catalog: crawlers, databases, tables | Unknown | Udemy | - |
-| Glue ETL jobs: PySpark on AWS | Unknown | Udemy (at the GlueJob2 assignment) | - |
+| Glue Data Catalog: crawlers, databases, tables | Unknown | Udemy; [crawler labs](../Glue-MasterClass/README.md) | - |
+| Glue ETL jobs: PySpark on AWS | Unknown | Udemy (at the GlueJob2 assignment); [jobs 1, 2, 6](../Glue-MasterClass/README.md) | - |
+| Glue workflows and triggers | Not started | [cfnworkflow2.json](../Glue-MasterClass/README.md) | - |
+| Glue Data Quality | Not started | [gluejob6.py](../Glue-MasterClass/README.md) | - |
+| Glue DataBrew | Not started | [gluejob345.yaml](../Glue-MasterClass/README.md) | - |
+| Glue streaming with Kinesis | Not started | blocked: Kinesis is denied by the SCP | - |
 | Athena: SQL over S3 | Not started | - | - |
 
 ### Integration

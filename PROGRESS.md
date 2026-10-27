@@ -1,6 +1,6 @@
 # Learning Progress
 
-**Status as of 2026-10-27 (Tuesday):** Learning AWS through the console so far, in `ap-southeast-2` as the IAM user `learning-cli`; the code chapters in `aws/` exist but have not been studied yet. The SQL track has five lessons; the author has worked through the execution-order examples by hand and answered 0 of the 30 questions. The GlueJob2 bucket decision is still open.
+**Status as of 2026-10-27 (Tuesday):** Learning AWS through the console, in `ap-southeast-2` as the IAM user `learning-cli`; the code chapters in `aws/` exist but have not been studied yet. The Udemy Glue course files are adapted to this account in `Glue-MasterClass/`; `role101` still needs the KMS key before any Glue job can run. The SQL track has five lessons; 0 of the 30 questions answered.
 
 This is the dashboard. Each subject has its own file in [progress/](progress/) that lists every topic, covered or not, with short re-teach notes for the covered ones. How these files are used, including re-teaching a topic studied before: [docs/progress-tracking-rules.md](docs/progress-tracking-rules.md). Updated by the `/update-progress` command.
 
@@ -10,7 +10,7 @@ This is the dashboard. Each subject has its own file in [progress/](progress/) t
 
 | Subject | Practised | Walked through | Mentioned | Unknown | Not started | Detail |
 |---|---|---|---|---|---|---|
-| AWS | 4 | 3 | 5 | 2 | 14 | [progress/aws.md](progress/aws.md) |
+| AWS | 4 | 3 | 5 | 2 | 18 | [progress/aws.md](progress/aws.md) |
 | SQL | 1 | 3 | 1 | 0 | 3 | [progress/sql.md](progress/sql.md) |
 | Tools & environment | 1 | 4 | 1 | 0 | 0 | [progress/tools.md](progress/tools.md) |
 
@@ -32,7 +32,7 @@ Topics the author found hard or asked about more than once. The detail is in the
 ## Next up
 
 1. **Set a budget alarm.** Still the only urgent item. $100 of credits makes overspend invisible until they are gone - nothing errors, the balance just drains. Billing -> Budgets -> zero-spend or $5 monthly alert.
-2. **Confirm the console works, then settle the GlueJob2 bucket.** Reload `bucket101pb` -> Permissions: no red `Access denied` means the corrected policy is right. Then decide: reuse `bucket101pb` (it already has SSE-KMS and the deny policy) or create `awsglueudemycourse-<name>-gluejob2-source` as the lecture says.
+2. **Get `bucket101pb` ready for the Glue labs.** The author chose to reuse it, with prefixes in place of the course's four buckets. First reload `bucket101pb` -> Permissions to confirm the corrected policy lets the console in; then give `role101` the KMS key, create the database `database101`, and upload the course files, following [Glue-MasterClass/README.md](Glue-MasterClass/README.md). Without the KMS step every Glue job fails before it starts.
 3. **Work the SQL questions, lesson 1 first.** 30 questions across [sql/](sql/), answered before opening [sql/solutions.md](sql/solutions.md). Joins is lesson 5 but read it second.
 4. **When moving to code, start with `aws/chapter1.py`.** Its four topics are only Mentioned, because the author has been learning through the console. Read it, run it and re-type it, then Chapter 2 (S3 with `boto3`) on a separate practice bucket: `bucket101pb` is a poor fit, being KMS-encrypted and restricted to a short exemption list.
 
@@ -42,10 +42,10 @@ Topics the author found hard or asked about more than once. The detail is in the
 - **Glue: partly answered.** The author is working through a Udemy course, *AWS Glue: The Complete Masterclass*, and was at the GlueJob2 assignment on 2026-10-27 (create an SSE-KMS encrypted S3 source bucket with a deny bucket policy, using a KMS key made in an earlier lecture). Confirmed: the earlier work lives in this account (bucket `bucket101pb`, KMS key `alias/s3101-KMS`, IAM users `user101` and `demouser101`, Glue role `role101`). Still unknown: how many lectures are done.
 - **Old access key deletion unconfirmed.** The local credentials file now holds a new key (`...COHR`, not the leaked `...LDVS`), so rotation happened — but whether the old key was *deleted* in IAM rather than just deactivated has not been verified.
 - **Region constraint (inferred).** The account is governed by an AWS Organizations service control policy that explicitly denies KMS calls in every enabled region except `ap-southeast-2`, `us-east-1` and `us-west-2`. Stay in `ap-southeast-2`. Other services were not tested.
-- **GlueJob2 bucket decision.** `bucket101pb` already has what the assignment asks for (SSE-KMS with `alias/s3101-KMS`, Bucket Key on, public access blocked, and now a deny-except policy). Whether to reuse it or create the lecture-named bucket is the author's call and is not made yet.
+- **Kinesis is denied by the SCP** in every region tested (ap-southeast-2, us-east-1, us-west-2), so the Udemy course's streaming lab (`gluejob345`) can't run in this account.
 - **Unused admin access keys.** `user101` (AdministratorAccess) and `demouser101` each have an active access key that has never been used. Deactivate both once the Glue course no longer needs them.
 
-Resolved 2026-10-26: AWS account confirmed, credentials configured, region settled, real AWS chosen over LocalStack. Resolved 2026-10-27: leaked key rotated; `postgres` MCP connected; `bucket101pb` lock-out recovered and a corrected policy applied.
+Resolved 2026-10-26: AWS account confirmed, credentials configured, region settled, real AWS chosen over LocalStack. Resolved 2026-10-27: leaked key rotated; `postgres` MCP connected; `bucket101pb` lock-out recovered and a corrected policy applied; GlueJob2 bucket settled (reuse `bucket101pb` with prefixes).
 
 ---
 
@@ -61,3 +61,4 @@ Resolved 2026-10-26: AWS account confirmed, credentials configured, region settl
 - **2026-10-27 (late)** — Finished the bucket lock-out: the first deny-except policy used a role ARN without its `/managed/` path, so it locked the console out again; the author recovered with a second privileged root session and applied the corrected policy (verified attached, console access not yet confirmed). Also ran and questioned several SQL examples by hand (WHERE vs HAVING, GROUP BY, rank gaps, `count(*)`), and asked for explanations in Malayalam with each command broken down, now saved as a rule in `docs/teaching-rules.md`.
 - **2026-10-27 (housekeeping)** — No new learning. Since the last entry, moved `chapter1.py` into `aws/` and the AWS rule files into `docs/aws/`, and wrote `docs/sql/sql-rules.md`. Then, at the author's request, split this tracker per subject (`progress/aws.md`, `progress/sql.md`, `progress/tools.md`), each listing every topic with its status and re-teach notes, and added `docs/progress-tracking-rules.md` so a topic studied before is re-taught from what worked instead of from scratch.
 - **2026-10-27 (correction)** — The author pointed out they had never looked at `aws/chapter1.py`: they are learning AWS through the console and have not moved to code. Its four topics were downgraded from Walked through to Mentioned. The same check (did the author ask about it, or do it?) also downgraded the SCP topic to Mentioned and Windows shells to Walked through, and fixed *Did* notes that credited the author with commands Claude ran. The rule is now written into `docs/progress-tracking-rules.md` and the `/update-progress` command, whose old wording (Claude-written code counts as walked through) caused the over-claim.
+- **2026-10-27 (Glue course files)** — The author added the Udemy course folder `Glue-MasterClass/`. Adapted it to this account: the course's four buckets became prefixes in `bucket101pb` (the author's choice), `gluejobrole1` became `role101`, and `us-east-1` became `ap-southeast-2`. Fixed bugs in the course files (job 2 template pointed at a wrong script name and passed a wrongly-cased argument; jobs 1 and 6 defined their lookup table after the UDF ran; job 6 overwrote job 1's output) and cut workers from 15 G.2X to 2 G.1X. Found that Kinesis is denied by the SCP in every region, so the streaming lab can't run, and that `role101` has no KMS permission yet. The 140 MB `city_temperature.csv` goes into Git LFS.
