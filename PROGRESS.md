@@ -1,85 +1,51 @@
 # Learning Progress
 
-**Status as of 2026-10-27 (Tuesday):** Live on AWS — account `<redacted>`, region `ap-southeast-2`, IAM user `learning-cli`, key rotated after the plaintext leak. Chapter 1 runs green. SQL track written and verified against the live 172k-row retail_db, with the `postgres` MCP now connected and queryable. Nothing in the SQL material has been attempted yet.
+**Status as of 2026-10-27 (Tuesday):** Learning AWS through the console so far, in `ap-southeast-2` as the IAM user `learning-cli`; the code chapters in `aws/` exist but have not been studied yet. The SQL track has five lessons; the author has worked through the execution-order examples by hand and answered 0 of the 30 questions. The GlueJob2 bucket decision is still open.
 
-Maintained by the `/update-progress` command. Levels mean exactly what they say:
-
-- **Practised** — wrote, ran, broke or debugged it unaided
-- **Walked through** — Claude built or explained it, read along, not yet done solo
+This is the dashboard. Each subject has its own file in [progress/](progress/) that lists every topic, covered or not, with short re-teach notes for the covered ones. How these files are used, including re-teaching a topic studied before: [docs/progress-tracking-rules.md](docs/progress-tracking-rules.md). Updated by the `/update-progress` command.
 
 ---
 
-## Covered so far
+## At a glance
 
-| Topic | Level | Where | Date | Specifics |
-|---|---|---|---|---|
-| Python environment management | Walked through | — | 2026-10-25 | `pyenv local`, why a bare `python` resolved to the wrong interpreter (PATH precedence), building a `.venv` from a pinned pyenv version, `python -m pip` vs `pip` and why `-m` matters on Windows |
-| boto3 clients & sessions | Walked through | [chapter1.py](chapter1.py) | 2026-10-25 | `boto3.client()` makes no network call; the client class is generated at runtime from botocore's JSON model; `boto3.Session()` owns identity, clients are made from it |
-| The credential chain | Walked through | [chapter1.py](chapter1.py) | 2026-10-25 | All 5 steps in order, "first one wins", `session.get_credentials()` and reading `credentials.method` to see which link supplied the keys |
-| Reading AWS errors | Walked through | [chapter1.py](chapter1.py) | 2026-10-25 | `NoCredentialsError` (local, nothing sent) vs `ClientError` (remote, AWS refused); `InvalidClientTokenId` vs `SignatureDoesNotMatch` |
-| Windows shells & process environment | **Practised** | - | 2026-10-27 | Why a running process never sees a newly-set PATH or env var (it reads them once, at startup); `%VAR%` vs `$env:VAR` vs `$VAR` across cmd / PowerShell / Git Bash; MSYS path conversion silently rewriting `cmd /c` to `cmd C:/`; and why a first-run `npx`/`uvx` download exceeds a 30s startup timeout. All learned by debugging one MCP server through five distinct failures. |
-| IAM user, access keys & CLI config | **Practised** | console + terminal | 2026-10-26 | Created a scoped IAM user (`ReadOnlyAccess` + `AmazonS3FullAccess`), generated a CLI access key, ran `aws configure`, and read the `LOCATION` column of `aws configure list` to confirm which file supplied each value. Learned User vs Role: roles have no access keys because something must assume them. |
-| `sts:GetCallerIdentity` | Walked through | [chapter1.py](chapter1.py) | 2026-10-25 | The "whoami" of AWS — free, needs no IAM permission, the right first call to prove a setup works |
+| Subject | Practised | Walked through | Mentioned | Unknown | Not started | Detail |
+|---|---|---|---|---|---|---|
+| AWS | 4 | 3 | 5 | 2 | 14 | [progress/aws.md](progress/aws.md) |
+| SQL | 1 | 3 | 1 | 0 | 3 | [progress/sql.md](progress/sql.md) |
+| Tools & environment | 1 | 4 | 1 | 0 | 0 | [progress/tools.md](progress/tools.md) |
+
+SQL questions answered: **0 / 30**.
+
+**Practised**: did it unaided. **Walked through**: Claude explained or built it while the author read along. **Mentioned**: came up in passing, not covered. **Unknown**: studied in the Udemy Glue course, depth not yet known. **Not started**: on the roadmap.
+
+## Revise first
+
+Topics the author found hard or asked about more than once. The detail is in the subject files.
+
+- **SQL: the GROUP BY family of errors.** An alias in `HAVING`, `count(*)` in `WHERE`, and `SELECT *` with `GROUP BY` were asked as three questions; they are one idea. [progress/sql.md](progress/sql.md)
+- **SQL: rank gaps and NULLS FIRST.** Expected 4, 4, 5 from `rank()`. [progress/sql.md](progress/sql.md)
+- **AWS: copying a role ARN from an error message.** The error drops the role's path, and it locked the console out once. [progress/aws.md](progress/aws.md)
+- **Tools: reading PATH unaided.** The wrong-interpreter problem was diagnosed by Claude, not the author. [progress/tools.md](progress/tools.md)
 
 ---
 
 ## Next up
 
-1. **Set a budget alarm.** Still the only urgent item. $100 of credits makes overspend invisible until they are gone — nothing errors, the balance just drains. Billing -> Budgets -> zero-spend or $5 monthly alert.
-2. **Work [sql/01_execution_order.md](sql/01_execution_order.md).** Everything else in the SQL track is a consequence of it, and the `postgres` MCP is now connected so queries can be checked instantly. 23 questions are written and unanswered.
-3. **Chapter 2 - S3.** `AmazonS3FullAccess` is already attached, so writes will work. Buckets, `put_object` / `get_object`, paginators, and why `list_objects_v2` truncates at 1000.
-4. **Chapter 3 - IAM in depth.** Once S3 gives something to grant access *to*, policies and `AssumeRole` stop being abstract. User vs Role is already half-learned from creating `learning-cli`.
-
-## Roadmap
-
-Proposed order — reorder freely. Grouped so each tier unlocks the next.
-
-**SQL** (local PostgreSQL 18, material ready in [sql/](sql/))
-- [ ] Execution order - the clause pipeline and the four rules that follow
-- [ ] DISTINCT - whole-row semantics, NULL handling, `DISTINCT ON`
-- [ ] Window functions - RANK family, frames, LAG/LEAD, the NULLS FIRST trap
-- [ ] CTEs - multiple, chained and recursive
-
-**Foundations**
-- [ ] IAM — users, access keys, policies, roles, `AssumeRole`
-- [ ] S3 — objects, prefixes, paginators, presigned URLs
-- [ ] CloudWatch Logs — how to see what anything did
-
-**Compute**
-- [ ] Lambda — `invoke()`, payloads, cold starts, env vars, layers
-- [ ] API Gateway + Lambda — turning a function into an HTTP endpoint
-- [ ] EC2 — launch, describe, tags, instance lifecycle, teardown discipline
-- [ ] ECR — pushing a container image
-- [ ] ECS / Fargate — task definitions, services, running a container without a server
-
-**Data**
-- [ ] DynamoDB — tables, partition vs sort key, `query` vs `scan`
-- [ ] Glue Data Catalog — crawlers, databases, tables
-- [ ] Glue ETL jobs — PySpark on AWS, `DynamicFrame` vs Spark `DataFrame`
-- [ ] Athena — querying S3 with SQL
-
-**Glue it together**
-- [ ] SQS / SNS — queues, topics, fan-out
-- [ ] Step Functions — orchestrating the above
-- [ ] VPC basics — subnets, security groups, why a Lambda loses internet in a VPC
-- [ ] IaC — CloudFormation or CDK
-
----
+1. **Set a budget alarm.** Still the only urgent item. $100 of credits makes overspend invisible until they are gone - nothing errors, the balance just drains. Billing -> Budgets -> zero-spend or $5 monthly alert.
+2. **Confirm the console works, then settle the GlueJob2 bucket.** Reload `bucket101pb` -> Permissions: no red `Access denied` means the corrected policy is right. Then decide: reuse `bucket101pb` (it already has SSE-KMS and the deny policy) or create `awsglueudemycourse-<name>-gluejob2-source` as the lecture says.
+3. **Work the SQL questions, lesson 1 first.** 30 questions across [sql/](sql/), answered before opening [sql/solutions.md](sql/solutions.md). Joins is lesson 5 but read it second.
+4. **When moving to code, start with `aws/chapter1.py`.** Its four topics are only Mentioned, because the author has been learning through the console. Read it, run it and re-type it, then Chapter 2 (S3 with `boto3`) on a separate practice bucket: `bucket101pb` is a poor fit, being KMS-encrypted and restricted to a short exemption list.
 
 ## Blocked / open questions
 
 - **No budget alarm configured.** Free-plan credits hide overspend entirely.
-- **Prior Glue experience unknown.** KeePass holds older IAM users labelled "for glue trial" and "aws glue demo study", suggesting earlier hands-on work with Glue. If so the Glue chapters should start further along. Asked twice, still unanswered.
+- **Glue: partly answered.** The author is working through a Udemy course, *AWS Glue: The Complete Masterclass*, and was at the GlueJob2 assignment on 2026-10-27 (create an SSE-KMS encrypted S3 source bucket with a deny bucket policy, using a KMS key made in an earlier lecture). Confirmed: the earlier work lives in this account (bucket `bucket101pb`, KMS key `alias/s3101-KMS`, IAM users `user101` and `demouser101`, Glue role `role101`). Still unknown: how many lectures are done.
 - **Old access key deletion unconfirmed.** The local credentials file now holds a new key (`...COHR`, not the leaked `...LDVS`), so rotation happened — but whether the old key was *deleted* in IAM rather than just deactivated has not been verified.
+- **Region constraint (inferred).** The account is governed by an AWS Organizations service control policy that explicitly denies KMS calls in every enabled region except `ap-southeast-2`, `us-east-1` and `us-west-2`. Stay in `ap-southeast-2`. Other services were not tested.
+- **GlueJob2 bucket decision.** `bucket101pb` already has what the assignment asks for (SSE-KMS with `alias/s3101-KMS`, Bucket Key on, public access blocked, and now a deny-except policy). Whether to reuse it or create the lecture-named bucket is the author's call and is not made yet.
+- **Unused admin access keys.** `user101` (AdministratorAccess) and `demouser101` each have an active access key that has never been used. Deactivate both once the Glue course no longer needs them.
 
-Resolved 2026-10-26: AWS account confirmed, credentials configured, region settled, real AWS chosen over LocalStack. Resolved 2026-10-27: leaked key rotated; `postgres` MCP connected.
-
-## Worth revisiting
-
-- Everything in `chapter1.py` is **walked through, not practised.** Re-type it from scratch without looking to promote it.
-- **Credential hygiene.** The secret access key was pasted in plaintext on 2026-10-26. The rule: the Access Key ID (`AKIA...`) is an identifier and safe to share; the Secret Access Key is typed only into the `aws configure` prompt and nowhere else. To show someone your setup, send `aws sts get-caller-identity` output, never the configure transcript.
-- **The whole SQL track is unpractised.** 4 lessons and 23 questions in [sql/](sql/) were written and verified by Claude, not worked by the author. None of it counts as covered until the questions are attempted without looking at [sql/solutions.md](sql/solutions.md).
-- The PATH precedence problem (standalone Python 3.12.4 beating pyenv's shims) was diagnosed by Claude, not the author. Worth being able to run `pyenv which python` and read `$PATH` unaided — it will recur on every new machine.
+Resolved 2026-10-26: AWS account confirmed, credentials configured, region settled, real AWS chosen over LocalStack. Resolved 2026-10-27: leaked key rotated; `postgres` MCP connected; `bucket101pb` lock-out recovered and a corrected policy applied.
 
 ---
 
@@ -91,3 +57,7 @@ Resolved 2026-10-26: AWS account confirmed, credentials configured, region settl
 - **2026-10-27** — Added a SQL track. Found an existing fully populated **retail_db** in local PostgreSQL 18 (172,198 order_items / 68,883 orders / 12,435 customers) and built the course on it rather than inventing toy data; added a small `practice` schema only for what retail_db cannot show - a manager hierarchy, deliberate salary ties, a NULL salary, and a gap in a date series. Wrote 4 lessons + 23 verified solutions. Registered a `postgres` MCP server; after two wrong turns (local scope made it invisible in the VS Code MCP panel, and a missing `@latest` resolved a stale 0.1.0 that rejects `--access-mode`) it now sits in the committed `.mcp.json` reading `${PG_LEARN_URI}` from a user environment variable, so the password is in neither file. Still needs its first `uvx` download before it will start. `aws-mcp` connected; `aws-docs` pending approval. Nothing in the SQL material is practised yet - it was written, not learned.
 - **2026-10-27 (later)** — Got the `postgres` MCP server connected after five separate failures, each a different cause: a missing `@latest` resolving a stale 0.1.0 that rejected `--access-mode`; `local` scope making the server invisible in the VS Code MCP panel; a new env var never reaching the already-running VS Code process; Git Bash rewriting `cmd /c` into `cmd C:/` via MSYS path conversion; and a first-run package download exceeding the 30s startup timeout. Settled on the **npm** `@modelcontextprotocol/server-postgres` at **user** scope reading `${POSTGRES_CONNECTION_STRING}` - the same server and variable the `insurance-etl-platform` project already used successfully, which should have been the starting point rather than the destination.
 - **2026-10-27 (end)** — Little new learning; mostly finishing what was already started. Confirmed the leaked AWS key had been rotated. Got the `postgres` MCP fully working and ran the first query through it (the RANK vs DENSE_RANK example), matching the lesson's verified table. The author caught a real defect Claude missed: the execution-order figure rendered as collapsed garbage because it was not inside a fenced code block — Markdown reflows unfenced text in a proportional font. Fixed, scanned every `.md` for the same mistake, and added the rule plus a scanner to `docs/note-writing-rules.md`.
+- **2026-10-27 (night)** — Worked the GlueJob2 assignment (SSE-KMS source bucket with a deny policy). Found the existing `bucket101pb` already carried a deny policy that locked out every principal except the exempt user, including the full-access console role. Recovered it via IAM Root access management (a privileged root session), which the author found and ran. Learned the three flavours of explicit deny, the User vs Role vs Policy split, and that the account sits under an organisation guardrail limiting regions. The deny policy is now deleted from `bucket101pb`; whether to re-add it, or reuse the bucket for GlueJob2, is still open.
+- **2026-10-27 (late)** — Finished the bucket lock-out: the first deny-except policy used a role ARN without its `/managed/` path, so it locked the console out again; the author recovered with a second privileged root session and applied the corrected policy (verified attached, console access not yet confirmed). Also ran and questioned several SQL examples by hand (WHERE vs HAVING, GROUP BY, rank gaps, `count(*)`), and asked for explanations in Malayalam with each command broken down, now saved as a rule in `docs/teaching-rules.md`.
+- **2026-10-27 (housekeeping)** — No new learning. Since the last entry, moved `chapter1.py` into `aws/` and the AWS rule files into `docs/aws/`, and wrote `docs/sql/sql-rules.md`. Then, at the author's request, split this tracker per subject (`progress/aws.md`, `progress/sql.md`, `progress/tools.md`), each listing every topic with its status and re-teach notes, and added `docs/progress-tracking-rules.md` so a topic studied before is re-taught from what worked instead of from scratch.
+- **2026-10-27 (correction)** — The author pointed out they had never looked at `aws/chapter1.py`: they are learning AWS through the console and have not moved to code. Its four topics were downgraded from Walked through to Mentioned. The same check (did the author ask about it, or do it?) also downgraded the SCP topic to Mentioned and Windows shells to Walked through, and fixed *Did* notes that credited the author with commands Claude ran. The rule is now written into `docs/progress-tracking-rules.md` and the `/update-progress` command, whose old wording (Claude-written code counts as walked through) caused the over-claim.

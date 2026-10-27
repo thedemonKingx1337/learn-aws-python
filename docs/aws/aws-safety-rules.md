@@ -10,7 +10,7 @@ EC2 instances, Glue jobs, Glue crawlers, NAT gateways and provisioned databases 
 
 ## Never commit secrets
 
-Never write access keys into a chapter, a README or a commit. The existing [.gitignore](../.gitignore) already covers `__pycache__/`, `*.py[cod]`, `.venv/`, `.vscode/`, `data/`, `.aws/`, `credentials` and `*.pem`. Extend it **before** writing any file that could hold a secret.
+Never write access keys into a chapter, a README or a commit. The existing [.gitignore](../../.gitignore) already covers `__pycache__/`, `*.py[cod]`, `.venv/`, `.vscode/`, `data/`, `.aws/`, `credentials` and `*.pem`. Extend it **before** writing any file that could hold a secret.
 
 Hard-coding keys into `boto3.client(...)` is step 1 of the credential chain and it does work — which is exactly why it must be shown as a thing never to do, not as a convenience.
 
@@ -18,4 +18,4 @@ Hard-coding keys into `boto3.client(...)` is step 1 of the credential chain and 
 
 - **Credentials** — whether chapters use a named profile, environment variables, or AWS SSO. Not yet decided; `aws configure` has never been run on this machine.
 - **Target environment** — whether a chapter runs against real AWS, against LocalStack/`moto`, or in Glue's local container. This changes the code, so state it at the top of each chapter.
-- **Region** — chapters currently default to `ap-south-1` via a `REGION` constant. Not yet confirmed as the author's choice.
+- **Region** — settled on `ap-southeast-2`, matching the account's console and the `REGION` constant in `chapter1.py`. Do not switch regions: the account sits under an AWS Organizations *service control policy* that returned an explicit deny for `kms:ListAliases` in 14 of the 17 enabled regions. Only `ap-southeast-2`, `us-east-1` and `us-west-2` answered. Only KMS was tested, so the full scope of the restriction is inferred, not confirmed.

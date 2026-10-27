@@ -1,7 +1,7 @@
 """
 Chapter 1 - boto3 Clients, Sessions and the Credential Chain
 
-Run:  python chapter1.py
+Run:  python aws/chapter1.py
 
 What you will learn:
   - what boto3.client() actually creates, and what it does NOT create

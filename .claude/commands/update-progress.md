@@ -1,11 +1,11 @@
 ---
-description: Analyse this session and update PROGRESS.md - what was learned, what is next. Needs no input.
+description: Analyse this session and update the tracker (PROGRESS.md and progress/) - what was learned, what is next. Needs no input.
 argument-hint: [optional focus note, e.g. "mark Lambda done"]
 ---
 
 # Update the learning tracker
 
-Update `PROGRESS.md` at the repo root so it reflects where the author now stands.
+Update the tracker so it reflects where the author now stands: the dashboard `PROGRESS.md`, and the subject files in `progress/` (`aws.md`, `sql.md`, `tools.md`). The layout, status levels and re-teach note format are defined in `docs/progress-tracking-rules.md`; follow them.
 
 **Work this out yourself from the conversation and the repo. Do NOT ask the author to summarise what they did.** Having to narrate their own progress is the exact chore this command exists to remove. If `$ARGUMENTS` is present, treat it as a steer, not as the whole answer.
 
@@ -14,8 +14,8 @@ Update `PROGRESS.md` at the repo root so it reflects where the author now stands
 Look at all of these before writing anything:
 
 - **This conversation** - what was actually explained, demonstrated, run, debugged, and what the author asked about. Their questions reveal what they did not know, which is as informative as what got covered.
-- **The repo** - which `chapterN.py` files exist, what APIs they import and call, and what `README.md` claims they teach.
-- **The current `PROGRESS.md`** - never rewrite it wholesale. Amend it, so history survives.
+- **The repo** - which `aws/chapterN.py` files exist, what APIs they import and call, and what `README.md` claims they teach.
+- **The current tracker** (`PROGRESS.md` and the files in `progress/`) - never rewrite it wholesale. Amend it, so history survives.
 - **`git log`** if this is a git repo - commit messages since the last tracker entry.
 - **Whether the work is actually safe** - see step 2b. Check this every time, not only when it looks wrong.
 
@@ -27,9 +27,11 @@ A learning tracker that overstates what the author knows is worse than no tracke
 - **Walked through** - Claude built or explained it while the author read along. They have seen it; they have not yet done it.
 - **Mentioned** - it came up in passing and was not really taught. Does not count as covered.
 
-If Claude wrote all the code, it is **walked through**, not practised. Say so. The author can promote an item themselves once they have redone it unaided.
+If Claude wrote all the code, it is **walked through** at most, and only if the author actually read it or asked about it. Code Claude wrote or ran without the author engaging is **Mentioned**. When unsure, choose the lower status and say so; the author can correct it upward. In a *Did* note, write only what the author did; when Claude ran a command, say so. The author can promote an item themselves once they have redone it unaided.
 
-Also capture what the author **struggled with or asked twice about** - that belongs under "Worth revisiting", because it is the most valuable section in the file.
+The topic tables use two more statuses: **Not started** (on the roadmap) and **Unknown** (studied outside this repo, such as the Udemy Glue course, depth not known).
+
+Also capture what the author **struggled with or asked twice about** - that goes in the topic's *Shaky* note, and the worst ones in *Revise first* on the dashboard, because it is the most valuable thing the tracker records.
 
 ## 2b. Check the work is actually safe
 
@@ -42,23 +44,30 @@ Progress recorded on work that could vanish is worthless. Before writing anythin
 
 Report the answer in the summary **every time**, even when everything is fine ("23 files, all committed, pushed"). A tracker that only mentions backup when it is already too late is not doing its job.
 
-## 3. Update these sections
+## 3. Update the subject files, then the dashboard
+
+**Subject files** (`progress/aws.md`, `progress/sql.md`, `progress/tools.md`):
+
+- **Topic rows** - set the status of every topic touched this session, and add a row for anything new. A status is changed here and nowhere else.
+- **Re-teach notes** - for every covered topic: *Idea*, *What worked* (the analogy or example that landed, in the language it was given), *Did*, *Shaky*, *Check*. If a topic was taught again, add a *Revisited* line with the date and what was still shaky. Name real functions, not vague topics: "`sts.get_caller_identity()`, the 5-step credential chain, `NoCredentialsError` vs `ClientError`" beats "AWS basics".
+- **SQL questions** - update the answered counts in `progress/sql.md`. A question counts only if the author answered it before opening the solutions.
+
+**Dashboard** (`PROGRESS.md`):
 
 - **Status line** - today's date, and the one-sentence state of play.
-- **Covered so far** - add new rows with: topic, level (practised / walked through), where it lives (`chapterN.py`), date, and the specific APIs or concepts. Name real functions, not vague topics: "`sts.get_caller_identity()`, the 5-step credential chain, `NoCredentialsError` vs `ClientError`" beats "AWS basics".
+- **At a glance** - recount the statuses from the subject files' topic rows. Never type the numbers by hand.
+- **Revise first** - two to four pointers to the shakiest topics.
 - **Next up** - the ordered shortlist, 2 to 4 items. Re-derive it each time from what was just finished and what it unlocks. Say in one line *why* each is next.
-- **Roadmap** - the longer backlog. Tick off what moved, and reorder if the session changed the plan.
-- **Blocked / open questions** - anything that cannot proceed yet (e.g. credentials not configured, no IAM user, a decision the author has not made). Remove items that got resolved.
-- **Worth revisiting** - concepts that were shaky, or that were walked through but never practised.
+- **Blocked / open questions** - anything that cannot proceed yet (e.g. a decision the author has not made). Remove items that got resolved.
 - **Session log** - append ONE dated entry, 1 to 3 lines, in the author's terms. Never delete older entries.
 
 ## 4. Rules
 
 - **Amend, never regenerate.** Prior entries and dates are the record; keep them.
 - **Be specific.** "Learned Lambda" is useless six weeks later. "Invoked a function with `lambda_client.invoke()`, read the `Payload` bytes, hit a cold start" is useful.
-- **If nothing meaningful was learned this session** (pure setup, refactoring, config), say exactly that in the session log and leave the covered table alone. Do not pad it.
-- **Keep the whole file under ~150 lines.** When the session log grows past ~20 entries, condense the oldest into a single summary line per month.
+- **If nothing meaningful was learned this session** (pure setup, refactoring, config), say exactly that in the session log and leave the topic rows alone. Do not pad them.
+- **Keep the dashboard under ~150 lines and the notes short.** When the session log grows past ~20 entries, condense the oldest into one line per month; when a re-teach note grows past ~8 lines, tighten it.
 
 ## 5. Report back
 
-Afterwards, tell the author in 3 to 5 lines: what moved to covered, what is next and why, and anything now unblocked. **Always include one line on whether the work is committed and backed up** (step 2b). Do not paste the whole file back.
+Afterwards, tell the author in 3 to 5 lines: which topics changed status, what is next and why, and anything now unblocked. **Always include one line on whether the work is committed and backed up** (step 2b). Do not paste the whole file back.

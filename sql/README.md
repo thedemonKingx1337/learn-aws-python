@@ -47,7 +47,7 @@ That file **drops and recreates only the `practice` schema**. It never touches `
 | [02_distinct.md](02_distinct.md) | DISTINCT applies to the whole row; NULL handling; `count(DISTINCT)`; `DISTINCT ON` |
 | [03_window_functions.md](03_window_functions.md) | `OVER`, `PARTITION BY`, ROW_NUMBER vs RANK vs DENSE_RANK, NULLS FIRST trap, ROWS vs RANGE frames, LAG/LEAD |
 | [04_ctes.md](04_ctes.md) | Single, **multiple**, chained and **recursive** CTEs; the Postgres 12 inlining change |
-| [solutions.md](solutions.md) | Answers with explanations — all 23 questions |
+| [solutions.md](solutions.md) | Answers with explanations — all 30 questions |
 
 Each lesson ends with questions graded easy → hard. **Attempt them before opening the solutions** — reading a correct query teaches far less than writing a wrong one and seeing the error.
 

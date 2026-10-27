@@ -29,7 +29,7 @@ The explicit interpreter path is deliberate: `pyenv local` alone does not make `
 
 ```powershell
 .\.venv\Scripts\Activate.ps1
-python chapterN.py
+python aws/chapterN.py
 ```
 
 If PowerShell refuses to run the activate script, unblock it for that session only:
@@ -47,8 +47,10 @@ The author's console is **cp1252**, not UTF-8. Printing box-drawing characters t
 - ASCII figures belong in **comments and docstrings**, which the editor reads as UTF-8. Never `print()` them.
 - If a script genuinely must emit them, run it with `PYTHONIOENCODING=utf-8`.
 
-## Credentials are not configured yet
+## Credentials
 
-`~/.aws` contains only `amazonq` and `sso` subfolders — there is no `credentials` or `config` file, so `aws configure` has never been run, and `boto3.Session().get_credentials()` returns `None`.
+Configured on 2026-10-26. The IAM user `learning-cli` (`ReadOnlyAccess` + `AmazonS3FullAccess`) has its access key in `~/.aws/credentials` and the region `ap-southeast-2` in `~/.aws/config`. `aws sts get-caller-identity` and `aws/chapter1.py` both succeed.
 
-Chapters must therefore **degrade gracefully when the credential chain comes up empty**, the way `chapter1.py` does: report the situation in plain English and exit, rather than assuming a live account and raising a traceback.
+Chapters should still **degrade gracefully when the credential chain comes up empty**, the way `aws/chapter1.py` does: say what is missing in plain English and exit instead of raising a traceback. This repo is public, and a fresh clone has no credentials.
+
+The Access Key ID (`AKIA...`) is an identifier and safe to share. The Secret Access Key is typed only at the `aws configure` prompt and nowhere else, never in chat, a file or a commit.

@@ -77,7 +77,7 @@ Do not eyeball it. Run a check — this is the script used on `chapter1.py`:
 
 ```bash
 PYTHONIOENCODING=utf-8 python - <<'PY'
-lines = open("chapter1.py", encoding="utf-8").read().split("\n")
+lines = open("aws/chapter1.py", encoding="utf-8").read().split("\n")
 fig = [l for l in lines if any(c in l for c in "┌┐└┘├┤│▼")]
 edges = {len(l) for l in fig if "─" in l}
 print("box-edge widths:", sorted(edges), "->",

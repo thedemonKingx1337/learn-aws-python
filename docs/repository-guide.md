@@ -16,11 +16,13 @@ The project root is **`chapter1/`**, not `learn__AWS/`. The parent `learn__AWS/`
 
 ## Layout
 
-- **`chapterN.py`** — one module per chapter, at the repo root, numbered sequentially. Each is **self-contained**: it builds its own clients/session and its own sample data, so any chapter can be read and run on its own without having run an earlier one.
+- **`aws/chapterN.py`** — one module per AWS chapter, inside `aws/`, numbered sequentially. Each is **self-contained**: it builds its own clients/session and its own sample data, so any chapter can be read and run on its own without having run an earlier one.
+- **Folders are named after the subject, except `docs/` and `progress/`.** `aws/` holds the AWS chapters and `sql/` the SQL practice; a new subject such as `glue/` gets its own folder. The two exceptions hold things about the course rather than course material: `docs/` the rules, and `progress/` the author's own progress, kept apart so the course material stays reusable for anyone who clones the repo.
 - Each chapter is **directly runnable** — real work guarded by `if __name__ == "__main__":` so the module can also be imported without side effects (important here: an import that fires AWS calls can cost money).
 - **`README.md`** — the course index, styled like a textbook table of contents: one table row per chapter with a relative link, a descriptive title, and the concrete APIs taught.
 - **`data/`** — sample datasets.
-- **`docs/`** — these rule files, indexed from `CLAUDE.md`.
+- **`docs/`** — the rules, indexed from `CLAUDE.md`. General rules sit at the top; subject-specific ones live in a subfolder named after the subject: `docs/aws/`, `docs/sql/`.
+- **`progress/`**: one tracker file per subject (`aws.md`, `sql.md`, `tools.md`); the dashboard is `PROGRESS.md` at the root. See `docs/progress-tracking-rules.md`.
 - **`.venv/`** — project-local virtual environment built from pyenv 3.12.6; **never index or modify it**.
 - **`.python-version`** — pyenv's version pin; commit it.
 

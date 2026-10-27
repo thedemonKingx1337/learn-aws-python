@@ -28,3 +28,11 @@ Never let a command go by unexplained — not even a one-liner, not even a read-
 - **Was it necessary?** No. It was hygiene. Installing boto3 would have worked fine on pip 24.2.
 
 This governs chat replies just as much as code comments. See [teaching-style-rules.md](teaching-style-rules.md) for *how* to pitch an explanation once you are writing one.
+
+## Language: Malayalam, with commands broken down
+
+The author is a Malayalam speaker and learns best this way. When they ask for Malayalam, or are clearly confused by an English explanation:
+
+- Explain in **Malayalam**. Keep technical terms, commands, file names and code in **English**.
+- After every command, add a bullet per part saying what it does, for example `aws iam get-role` (what it asks), `--query` (what it picks out), `--output text` (how it prints).
+- Start with an analogy, then give the real mechanism. Keep tables short.
